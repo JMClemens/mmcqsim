@@ -1,6 +1,6 @@
 This program is an M/M/c queueing study made to simulate grocery store queues, as well as customer and cashier behavior.
 
-Program has been written and compiled on Ubuntu 16.04
+Program has been written and compiled on Ubuntu 16.04 using python version 2.7.12
 
 To run program: python sim.py
 
