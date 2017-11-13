@@ -192,71 +192,72 @@ def cleanupPrompt():
 
 # TODO: Add visual animation to simulation
 
-# this range is the number of cashiers we are running our tests for
-# 2,11 runs our trials for 2 cashier lanes through 10 cashier lanes
-for numCashiers in range(2,11):
+if __name__ == "__main__":
+    # this range is the number of cashiers we are running our tests for
+    # 2,11 runs our trials for 2 cashier lanes through 10 cashier lanes
+    for numCashiers in range(2,11):
 
-    # create the temp directory inside our current directory
-    # to hold txt and csv files created during simulation
-    mydir = os.getcwd() + '/temp'
-    if not os.path.exists(mydir):
-        os.makedirs(mydir)
+        # create the temp directory inside our current directory
+        # to hold txt and csv files created during simulation
+        mydir = os.getcwd() + '/temp'
+        if not os.path.exists(mydir):
+            os.makedirs(mydir)
 
-    # writes our results to different files for each # of cashiering lanes
-    AllQWaitFile = 'temp/' + str(numCashiers) + 'clerks-qw.txt'
-    AllQLengthFile = 'temp/' + str(numCashiers) + 'clerks-ql.txt'
-    MeanQWait = 'temp/' + str(numCashiers) + 'clerks-qw-means.csv'
-    MeanQLength = 'temp/' + str(numCashiers) + 'clerks-ql-means.csv'
+        # writes our results to different files for each # of cashiering lanes
+        AllQWaitFile = 'temp/' + str(numCashiers) + 'clerks-qw.txt'
+        AllQLengthFile = 'temp/' + str(numCashiers) + 'clerks-ql.txt'
+        MeanQWait = 'temp/' + str(numCashiers) + 'clerks-qw-means.csv'
+        MeanQLength = 'temp/' + str(numCashiers) + 'clerks-ql-means.csv'
 
 
-    # keep track of our normal terminal output and
-    # create the files we are writing results to
-    orig_out = sys.stdout
-    f = open(AllQWaitFile,'w')
-    f2 = open(AllQLengthFile,'w')
+        # keep track of our normal terminal output and
+        # create the files we are writing results to
+        orig_out = sys.stdout
+        f = open(AllQWaitFile,'w')
+        f2 = open(AllQLengthFile,'w')
 
-    # this range is the number of trials/simulations are running
-    # change 268 for a different number of trials
-    for i in range(268):
+        # this range is the number of trials/simulations are running
+        # change 268 for a different number of trials
+        for i in range(4191):
 
-        # create a new environment to sim
-        env = sim.Environment(trace=False)
-        
-        # start our customer generations
-        CustomerGenerator()
+            # create a new environment to sim
+            env = sim.Environment(trace=False)
+            
+            # start our customer generations
+            CustomerGenerator()
 
-        cashiers = sim.Queue('cashier')
-        for i in range(numCashiers):
-            Cashier().enter(cashiers)
-        waitingline = sim.Queue('waitingline')
+            cashiers = sim.Queue('cashier')
+            for i in range(numCashiers):
+                Cashier().enter(cashiers)
+            waitingline = sim.Queue('waitingline')
 
-        # 1 time unit = 1 minute
-        # run simulation for 6 hours, or 360 mins
-        env.run(till=360)
+            # 1 time unit = 1 minute
+            # run simulation for 6 hours, or 360 mins
+            env.run(till=360)
 
-        # changes the standard output from the terminal to our different files
-        # allows us to write that output to files for further processing
-        sys.stdout = f
-        waitingline.length_of_stay.print_statistics()
-        sys.stdout = f2
-        waitingline.length.print_statistics()
+            # changes the standard output from the terminal to our different files
+            # allows us to write that output to files for further processing
+            sys.stdout = f
+            waitingline.length_of_stay.print_statistics()
+            sys.stdout = f2
+            waitingline.length.print_statistics()
 
-    # change the output back to console and close files
-    sys.stdout = orig_out
-    f.close()
-    f2.close()
+        # change the output back to console and close files
+        sys.stdout = orig_out
+        f.close()
+        f2.close()
 
-    # Write the mean queue waiting times to a new file
-    writeMeanQueueWait()
+        # Write the mean queue waiting times to a new file
+        writeMeanQueueWait()
 
-    # Write the mean queue length to a new file
-    writeMeanQueueLength()
+        # Write the mean queue length to a new file
+        writeMeanQueueLength()
 
-    # Print the average of the mean queue length and mean queue wait
-    print('Lanes open: ' + str(numCashiers))
-    getMeanQueueLength()
-    getMeanQueueWait()
+        # Print the average of the mean queue length and mean queue wait
+        print('Lanes open: ' + str(numCashiers))
+        getMeanQueueLength()
+        getMeanQueueWait()
 
-# Allow user to clean up files created during the simulation
-# or to keep them for further studying or processing
-cleanupPrompt()
+    # Allow user to clean up files created during the simulation
+    # or to keep them for further studying or processing
+    cleanupPrompt()
