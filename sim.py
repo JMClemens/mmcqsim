@@ -1,9 +1,9 @@
 '''
 M/M/c queueing simulator
 
-This program will run a simulation of a grocery store
-
-The MIT License (MIT)
+This program will run a simulation of a grocery store's cashering lanes,
+and measure the average wait time in the queues and the average lengths of the queues
+for different numbers of open cashiering lanes
 
 Copyright (c) 2017 Karen Canas Hernandez, Joshua Clemens, Jacob Denion, Cory Watson, Afton Woodring
 
