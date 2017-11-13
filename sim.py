@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sbm as sim
 import random as r
 import sys
+import os
 import csv
 from collections import defaultdict
 from decimal import *
@@ -55,7 +56,7 @@ class Customer(sim.Component):
         # if no cashiers are available for service, then the customer must wait
         yield self.passivate()
 
-# This class defines out cashier behavior
+# This class defines our cashier behavior
 class Cashier(sim.Component):
     def process(self):
         while True:
@@ -142,8 +143,51 @@ def getMeanQueueLength():
     qlMean = (sum(map(Decimal,columns[1])))/len(columns[i])
     print('Average queue length: ' + str(qlMean))
 
-# TODO: Create cleanup function for temp files
-#       and possibly store temp files in their own /tmp/ directory
+# This function makes a list of all '.txt' files 
+# in our temp folder and removes them
+def cleanupTxtFiles():
+    mydir = os.getcwd() + '/temp'
+    filelist = [f for f in os.listdir(mydir) if f.endswith(".txt")]
+    for f in filelist:
+        os.remove(os.path.join(mydir,f))
+    print("Txt files deleted.")
+
+# This function makes a list of all '.csv' files 
+# in our temp folder and removes them
+def cleanupCsvFiles():
+    mydir = os.getcwd() + '/temp'
+    filelist = [f for f in os.listdir(mydir) if f.endswith(".csv")]
+    for f in filelist:
+        os.remove(os.path.join(mydir,f))
+    print("CSV files deleted.")
+
+# The function allows the user to choose which
+# data they want to keep and what they would like to delete
+def cleanupPrompt():
+
+    print("\nFile cleanup options:\n")
+
+    # option to delete temp folder and all its contents
+    # return statement exits function afterwards so other options aren't given
+    option1 = raw_input("Would you like to delete the temp folder and all tempory files \n" + 
+        " created during this simulation? (y/n)\n").lower()
+    if(option1 == 'y'):
+        cleanupTxtFiles()
+        cleanupCsvFiles()
+        os.rmdir(os.getcwd() + '/temp')
+        return
+
+    # option to delete all txt files
+    option2 = raw_input("Would you like to delete TXT files with average queue wait time " +
+         "\n and length statistical data from this simulation? (y/n)\n").lower()
+    if(option2 == 'y'):
+        cleanupTxtFiles()
+    
+    # option to delete all csv files
+    option3 = raw_input("Would you like to delete CSV files with average queue wait time " +
+        "\n and length from this simulation? (y/n)\n").lower()
+    if(option3 == 'y'):
+        cleanupCsvFiles()
 
 
 # TODO: Add visual animation to simulation
@@ -152,11 +196,17 @@ def getMeanQueueLength():
 # 2,11 runs our trials for 2 cashier lanes through 10 cashier lanes
 for numCashiers in range(2,11):
 
+    # create the temp directory inside our current directory
+    # to hold txt and csv files created during simulation
+    mydir = os.getcwd() + '/temp'
+    if not os.path.exists(mydir):
+        os.makedirs(mydir)
+
     # writes our results to different files for each # of cashiering lanes
-    AllQWaitFile = str(numCashiers) + 'clerks-qw.txt'
-    AllQLengthFile = str(numCashiers) + 'clerks-ql.txt'
-    MeanQWait = str(numCashiers) + 'clerks-qw-means.csv'
-    MeanQLength = str(numCashiers) + 'clerks-ql-means.csv'
+    AllQWaitFile = 'temp/' + str(numCashiers) + 'clerks-qw.txt'
+    AllQLengthFile = 'temp/' + str(numCashiers) + 'clerks-ql.txt'
+    MeanQWait = 'temp/' + str(numCashiers) + 'clerks-qw-means.csv'
+    MeanQLength = 'temp/' + str(numCashiers) + 'clerks-ql-means.csv'
 
 
     # keep track of our normal terminal output and
@@ -207,4 +257,6 @@ for numCashiers in range(2,11):
     getMeanQueueLength()
     getMeanQueueWait()
 
-
+# Allow user to clean up files created during the simulation
+# or to keep them for further studying or processing
+cleanupPrompt()
