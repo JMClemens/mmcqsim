@@ -4,8 +4,6 @@ Program has been written and compiled on Ubuntu 16.04 using python version 2.7.1
 
 To run program: python sim.py
 
-Please note: Temporary files for calculations are not yet removed after each run of the program. After each run, please delete the txt and csv files created in this directory for clerks 2-10, as having them in there will mess up calculations for the next program run.
-
 Dependencies:
 Salabim discrete event simulation package: modified version included as sbm.py
 Pillow: sudo pip install Pillow 
