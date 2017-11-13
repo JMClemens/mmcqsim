@@ -1,0 +1,14 @@
+This program is an M/M/c queueing study made to simulate grocery store queues, as well as customer and cashier behavior.
+
+Program has been written and compiled on Ubuntu 16.04
+
+To run program: python sim.py
+
+Dependencies:
+
+Salabim discrete event simulation package: modified version included as sbm.py
+Pillow 
+Tkinter
+
+sudo pip install Pillow
+sudo apt-get install python-tk
