@@ -450,7 +450,8 @@ class Monitor(object):
                     fn(self.number_of_entries(ex0=True), 13, 3), fn(self.number_of_entries_zero(), 13, 3)))
 
         # Change the argument in the format function from 
-        # 3 to 8 decimal places for better precision
+        # 3 to 8 decimal places, as regular floats have
+        # 24 bits or 8 digits of precision
         # - Josh
 
         print(indent + 'mean          {}{}'.
