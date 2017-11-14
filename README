@@ -5,6 +5,6 @@ Program has been written and compiled on Ubuntu 16.04 using python version 2.7.1
 To run program: python sim.py
 
 Dependencies:
-Salabim discrete event simulation package: modified version included as sbm.py
+Salabim: modified version included as sbm.py
 Pillow: sudo pip install Pillow 
 Tkinter: sudo apt-get install python-tk

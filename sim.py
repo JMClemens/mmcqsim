@@ -48,6 +48,9 @@ class CustomerGenerator(sim.Component):
             # creates a new customer
             Customer()
 
+            #print("Peek\n")
+            #print(env.peek())
+
             # waits to generate the next customer based on
             # an expontentially distributed interrarrival time
             yield self.hold(sim.Exponential(6,r.seed()).sample())
@@ -70,6 +73,10 @@ class Customer(sim.Component):
 
 # This class defines our cashier behavior
 class Cashier(sim.Component):
+    def setup(self):
+        self._schedET = 0
+        self._currcname = ''
+
     def process(self):
         while True:
 
@@ -83,7 +90,25 @@ class Cashier(sim.Component):
             # and then they 'hold' the customer, or make them wait 
             # based on an exponentially distributed service time
             yield self.hold(sim.Exponential(5,r.seed()).sample())
+            
             self.customer.activate()
+
+            self._currcname = self.customer.name()
+            print("\nCustomer name: " + self._currcname + '\n')
+
+            self._schedET = env.peek()
+            print("\nCustomer end time: " + str(self._schedET))
+            
+            '''
+            print("Peek\n")
+            print(env.peek())
+			'''
+
+	def getEndCustomerName(self):
+		return string(self._currcname).rsplit('.',1)[1]
+
+    def getScheduledEndTime(self):
+    	return float(self._schedET)
 
 # This function reads the mean queue wait statistics file 
 # we created during simulation and takes just the averages
@@ -205,9 +230,11 @@ def cleanupPrompt():
 # TODO: Add visual animation to simulation
 
 if __name__ == "__main__":
+
     # this range is the number of cashiers we are running our tests for
     # 2,11 runs our trials for 2 cashier lanes through 10 cashier lanes
-    for numCashiers in range(2,11):
+    for numCashiers in range(2,3):
+
 
         # create the temp directory inside our current directory
         # to hold txt and csv files created during simulation
@@ -227,25 +254,31 @@ if __name__ == "__main__":
         orig_out = sys.stdout
         f = open(AllQWaitFile,'w')
         f2 = open(AllQLengthFile,'w')
+        
 
         # this range is the number of trials/simulations are running
-        # change 268 for a different number of trials
-        for i in range(4191):
+        # change for a different number of trials
+        for i in range(5): # TODO: change back to 4191 from 5
 
             # create a new environment to sim
-            env = sim.Environment(trace=False)
-            
+            env = sim.Environment(trace=True)
+
+
             # start our customer generations
             CustomerGenerator()
 
+            # put our cashiers into their own queue
             cashiers = sim.Queue('cashier')
             for i in range(numCashiers):
                 Cashier().enter(cashiers)
+
+            # simulate the waiting line for the customers
             waitingline = sim.Queue('waitingline')
 
             # 1 time unit = 1 minute
             # run simulation for 6 hours, or 360 mins
             env.run(till=360)
+
 
             # changes the standard output from the terminal to our different files
             # allows us to write that output to files for further processing
