@@ -28,6 +28,18 @@ import csv
 from collections import defaultdict
 from decimal import *
 
+class AnimateCustomer(sim.Animate):
+    pass
+
+class AnimateCashier(sim.Animate):
+    pass
+
+class AnimateCustomerVisit(sim.Animate):
+    pass
+
+def do_animation():
+    pass
+
 # This class generates customers
 class CustomerGenerator(sim.Component):
     def process(self):
