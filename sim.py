@@ -217,7 +217,7 @@ if __name__ == "__main__":
         f2 = open(AllQLengthFile,'w')
 
         # this range is the number of trials/simulations are running
-        # change 268 for a different number of trials
+        # change 4191 for a different number of trials
         for i in range(4191):
 
             # create a new environment to sim
