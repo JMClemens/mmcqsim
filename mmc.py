@@ -106,6 +106,7 @@ def do_animation():
     env.animation_parameters(modelname='M/M/c')
 
 
+# This class defines our customer behavior
 class Client(sim.Component):
     def process(self):
         yield self.request(cashiers)
@@ -114,6 +115,7 @@ class Client(sim.Component):
         idle_cashier_indexes.append(self.cashier_index)  # return the cashier to the idle pool
 
 
+# This class generates customers
 class ClientGenerator(sim.Component):
     def process(self):
         while True:
@@ -266,23 +268,17 @@ if __name__ == "__main__":
 
         # this range is the number of trials/simulations are running
         # change 4191 for a different number of trials
-        for i in range(1000):
+        for i in range(4191):
 
             # create a new environment to sim
             env = sim.Environment(trace=False)
 
+            # create the number of lanes
             cashiers = sim.Resource('cashiers', capacity=numCashiers)
             idle_cashier_indexes= deque(range(numCashiers))  # this is to keep track of which cashiers are idle (only for animation)
 
             # start our customer generations
             ClientGenerator()
-
-            '''
-            cashiers = sim.Queue('cashier')
-            for i in range(numCashiers):
-                Cashier().enter(cashiers)
-            waitingline = sim.Queue('waitingline')
-            '''
 
             do_animation()
 
@@ -295,7 +291,7 @@ if __name__ == "__main__":
             sys.stdout = f
             cashiers.requesters().length_of_stay.print_statistics()
             sys.stdout = f2
-            cashiers.requesters().length_of_stay.print_statistics()
+            cashiers.requesters().length.print_statistics()
 
         # change the output back to console and close files
         sys.stdout = orig_out
